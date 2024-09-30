@@ -13,8 +13,8 @@ def search_on_gemini(role, company, interviewer_type):
     model = genai.GenerativeModel("gemini-1.5-flash")
 
     prompt = (
-        f"You are interviewer and you are interviewing a candidate for '{role}' "
-        f"interview at {company} with a {interviewer_type} interviewer. list 4 interview related questions don't add unnecessary information."
+        f"You are interviewer and you are interviewing a candidate for '{role} and diffculty level is {difficulty_level}' "
+        f"interview at {company} with a {interviewer_type} interviewer and what kind of {company_type} he is selecting . list 4 interview related questions don't add unnecessary information."
     )
     response = model.generate_content(prompt)
     results = response.text.strip().split("\n")
@@ -33,8 +33,17 @@ with col1:
     with sec1:
         company = st.selectbox('Company', options=('Google', 'Meta', 'Wipro', 'Accenture', 'Other'))
     with sec2:
-        interviewer_type = st.selectbox('Interviewer', options=('Basic','Professional', 'Technical', 'Behaviour'))
+        interviewer_type = st.selectbox('Interviewer', options=('Professional', 'Technical', 'Behaviour','Friendly'))
+    
 
+col3,col4 = st.columns(2)
+
+with col3:
+    sec3,sec4 = st.columns(2)
+    with sec3:
+     difficulty_level = st.selectbox('Difficulty',options=('Beginner','Intermediate','Expert'))
+    with sec4:
+        company_type = st.text_input("Company Type")
 # WebRTC stream for recording interviews
 with st.container(height=50):
     with col2:
@@ -52,9 +61,9 @@ if st.button("Search"):
         # Call the search function with user input
         results = search_on_gemini(role, company, interviewer_type)
         # Display the results
-        st.container().markdown("<div style='border: 2px solid #007bff; border-radius: 10px; padding: 20px;'>", unsafe_allow_html=True)  
+        # st.container(border=True,height=300)  
         for result in results:
             st.write(result)
-        st.container().markdown("</div>", unsafe_allow_html=True)  # End of result container
+          # End of result container
     else:
         st.warning("Please enter a role to search.")
