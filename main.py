@@ -4,6 +4,8 @@ from streamlit_webrtc import webrtc_streamer
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
+from matplotlib import pyplot as plt
+import pprint
 
 load_dotenv()
 genai.configure(api_key = os.environ["gemini"])
@@ -39,9 +41,10 @@ with st.container(height=50):
         webrtc_streamer('record interview')
 
 with st.sidebar.container():
-    st.page_link("./main.py",label="Home", icon="🏠")
-    st.page_link("./about.py",label="About")
-
+    st.page_link("main.py",label="Home")
+    st.page_link("pages\\about.py",label="About")
+    st.page_link("pages\\contact.py",label="Contact")
+    st.page_link("pages\\result.py",label="Result")
 
 # Create a button for search functionality
 if st.button("Search"):
