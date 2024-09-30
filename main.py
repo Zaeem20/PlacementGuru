@@ -33,7 +33,7 @@ with col1:
     with sec1:
         company = st.selectbox('Company', options=('Google', 'Meta', 'Wipro', 'Accenture', 'Other'))
     with sec2:
-        interviewer_type = st.selectbox('Interviewer', options=('Professional', 'Technical', 'Behaviour'))
+        interviewer_type = st.selectbox('Interviewer', options=('Basic','Professional', 'Technical', 'Behaviour'))
 
 # WebRTC stream for recording interviews
 with st.container(height=50):
@@ -58,5 +58,3 @@ if st.button("Search"):
         st.container().markdown("</div>", unsafe_allow_html=True)  # End of result container
     else:
         st.warning("Please enter a role to search.")
-
-
