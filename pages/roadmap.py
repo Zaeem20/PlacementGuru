@@ -10,12 +10,22 @@ from graphviz import Digraph
 
 load_dotenv()
 genai.configure(api_key = os.environ["GEMINI_API_KEY"])
-
+# st.sidebar.image('0')
+with st.sidebar:
+    st.image("assets\\img.png",width=300)
+    st.page_link("main.py",label="Home")
+    st.page_link("pages\\about.py",label="About")
+    st.page_link("pages\\contact.py", label="Contact")
+    st.page_link("pages\\result.py",label="Result")
+    st.page_link("pages\\chat.py",label="Chat With our AI")
+    st.page_link("pages\\roadmap.py",label="Roadmap")
+    
+# Create a button for search functionality
 def get_roadmap_from_gemini(role):
     # Define the prompt for Gemini to generate a role-specific roadmap
     prompt = (
         f"Please create a flowchart describing the steps involved in a career roadmap for someone aspiring to become a {role}. "
-        f"List the stages as nodes and specify the relationships as edges between them."
+        f"i don't want additional information just show me the nodes in a list of [(from, to)]"
     )             
     # Fetch the response from the model
     model = genai.GenerativeModel('gemini-1.5-flash')
@@ -25,6 +35,7 @@ def get_roadmap_from_gemini(role):
     # Assume the response is a structured list of stages and tasks
     
     roadmap_text = response.text.strip()
+    st.write(roadmap_text)
     return parse_roadmap(roadmap_text)
 
 def create_graphviz_diagram(nodes, edges):

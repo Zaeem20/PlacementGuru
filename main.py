@@ -133,12 +133,12 @@ with col2.container(height=350):
 # st.sidebar.image('0')
 with st.sidebar:
     st.image("assets\\img.png",width=300)
-    st.page_link("main.py",label="Home")
-    st.page_link("pages\\about.py",label="About")
-    st.page_link("pages\\contact.py", label="Contact")
-    st.page_link("pages\\result.py",label="Result")
-    st.page_link("pages\\chat.py",label="Chat With our AI")
-    st.page_link("pages\\roadmap.py",label="Roadmap")
+    st.page_link("main.py",label="Home", icon="🏠")
+    st.page_link("pages\\about.py",label="About", icon='❓')
+    st.page_link("pages\\contact.py", label="Contact", icon='📧')
+    # st.page_link("pages\\result.py",label="Result")
+    st.page_link("pages\\chat.py",label="Chat With PlacementGuru AI", icon='🤖')
+    st.page_link("pages\\roadmap.py",label="Roadmap", icon='🛣️')
 # Create a button for search functionality
 st.divider()
 if button_click:

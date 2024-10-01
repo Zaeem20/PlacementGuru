@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 
 
 load_dotenv()
-genai.configure(api_key = os.environ["gemini"])
+genai.configure(api_key = os.environ["GEMINI_API_KEY"])
 
 
 filler_words = ["um", "uh", "like", "you know", "so", "basically", "actually", "literally","mhmm"]
