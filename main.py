@@ -7,6 +7,7 @@ import moviepy.editor as me
 import numpy as np
 import pydub, av, uuid
 from pathlib import Path
+import json
 from aiortc.contrib.media import MediaRecorder
 from streamlit_webrtc import VideoHTMLAttributes, webrtc_streamer, WebRtcMode
 
@@ -14,14 +15,11 @@ load_dotenv()
 genai.configure(api_key = os.environ["GEMINI_API_KEY"])
 def search_on_gemini(role, company, interviewer_type):
     model = genai.GenerativeModel("gemini-1.5-flash")
-
-    prompt = (
-        f"You are interviewer and you are interviewing a candidate for '{role} and diffculty level is {difficulty_level}' "
-        f"interview at {company} with a {interviewer_type} interviewer and what kind of {company_type} he is selecting . list 4 interview related questions don't add unnecessary information.generate 10 aptitude questions aswell"
-    )
-    response = model.generate_content(prompt)
-    results = response.text.strip().split("\n")
-    return results if results else ["No results found. Please try again."]
+    prompt = json.load(open("prompts\prompts.json"))
+    response = model.generate_content(prompt.get('interviewer').format(role=role, difficulty_level=difficulty_level, company=company, interviewer_type=interviewer_type, company_type=company_type))
+    results = json.loads(response.text)
+    # st.write(results)
+    return results
 
 st.set_page_config(page_title='PlacementGuru', layout='wide')
 
@@ -118,8 +116,7 @@ with col2.container(height=350):
             "sampleSize": 16,
             'echoCancellation': True,
             "noiseSuppression": True,
-            "channelCount": 1}},
-        video_html_attrs=VideoHTMLAttributes(),
+            "channelCount": 1}} ,
         on_change=convert_to_wav,
         audio_frame_callback=process_audio,
         in_recorder_factory=in_recorder_factory,
@@ -135,7 +132,7 @@ with col2.container(height=350):
 
 # st.sidebar.image('0')
 with st.sidebar:
-    st.image(".\\PlacementGuru\\img.png",width=200)
+    st.image("assets\\img.png",width=300)
     st.page_link("main.py",label="Home")
     st.page_link("pages\\about.py",label="About")
     st.page_link("pages\\contact.py", label="Contact")
@@ -158,12 +155,16 @@ if button_click:
         with st.spinner(text='Generating Questions...', ):
             if role:
                 # Call the search function with user input
-                results = search_on_gemini(role, company, interviewer_type)
+                result = search_on_gemini(role, company, interviewer_type)
+                st.session_state['interview_question'] = result['questions'].copy()
+                st.session_state['pending_questions'] = st.session_state['interview_question'][::-1]
                 # Display the results
-                # st.container(border=True,height=300)  
-                for result in results:
-                    st.write(result)
-                    # End of result container
+                # st.container(border=True,height=300) 
+                # st.container(border=True,height=300)
+                st.subheader(result["topic-title"])
+                for i in result['questions']:
+                    st.markdown(f'-  **{i}**')
+
             else:
                 st.warning("Please enter a role to search.")
 
