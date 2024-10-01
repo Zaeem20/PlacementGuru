@@ -141,6 +141,7 @@ with st.sidebar:
     st.page_link("pages\\contact.py", label="Contact")
     st.page_link("pages\\result.py",label="Result")
     st.page_link("pages\\chat.py",label="Chat With our AI")
+    st.page_link("pages\\roadmap.py",label="Roadmap")
 
 # Create a button for search functionality
 st.divider()
@@ -171,3 +172,4 @@ if button_click:
                     # End of result container
             else:
                 st.warning("Please enter a role to search.")
+
