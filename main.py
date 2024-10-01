@@ -17,7 +17,7 @@ def search_on_gemini(role, company, interviewer_type):
 
     prompt = (
         f"You are interviewer and you are interviewing a candidate for '{role} and diffculty level is {difficulty_level}' "
-        f"interview at {company} with a {interviewer_type} interviewer and what kind of {company_type} he is selecting . list 4 interview related questions don't add unnecessary information."
+        f"interview at {company} with a {interviewer_type} interviewer and what kind of {company_type} he is selecting . list 4 interview related questions don't add unnecessary information.generate 10 aptitude questions aswell"
     )
     response = model.generate_content(prompt)
     results = response.text.strip().split("\n")
@@ -25,7 +25,8 @@ def search_on_gemini(role, company, interviewer_type):
 
 st.set_page_config(page_title='PlacementGuru', layout='wide')
 
-st.title('Placement Guru')
+
+st.title("Placement Guru")
 
 # Base Path for Recordings
 RECORD_DIR = Path("records")
@@ -127,13 +128,13 @@ with col2.container(height=350):
 
 # st.sidebar.image('0')
 with st.sidebar:
+    st.image(".\\PlacementGuru\\img.png",width=200)
     st.page_link("main.py",label="Home")
     st.page_link("pages\\about.py",label="About")
     st.page_link("pages\\contact.py", label="Contact")
     st.page_link("pages\\result.py",label="Result")
     st.page_link("pages\\chat.py",label="Chat With our AI")
     st.page_link("pages\\roadmap.py",label="Roadmap")
-
 # Create a button for search functionality
 st.divider()
 if button_click:
