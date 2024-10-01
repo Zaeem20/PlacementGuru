@@ -105,12 +105,12 @@ with col1.container(height=350):
 
 # WebRTC stream for recording interviews
 with col2.container(height=350):
-    if st.button('Next Question'):
-        if st.session_state.get('pending_questions', None):
-            try:
-                speak_text(st.session_state['pending_questions'].pop())
-            except StopIteration:
-                speak_text("All Questions done")
+    # if st.button('Next Question'):
+    #     if st.session_state.get('pending_questions', None):
+    #         try:
+    #             speak_text(st.session_state['pending_questions'].pop())
+    #         except StopIteration:
+    #             speak_text("All Questions done")
 
     webstream=webrtc_streamer(
         key="Start Interview",
