@@ -131,6 +131,7 @@ with st.sidebar:
     st.page_link("pages\\about.py",label="About")
     st.page_link("pages\\contact.py", label="Contact")
     st.page_link("pages\\result.py",label="Result")
+    st.page_link("pages\\chat.py",label="Chat With our AI")
 
 # Create a button for search functionality
 st.divider()
