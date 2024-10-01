@@ -1,27 +1,30 @@
 import os, time
 import streamlit as st
+import json 
 import google.generativeai as genai
 from dotenv import load_dotenv
 import matplotlib.pyplot as plt
 import moviepy.editor as me
-import numpy as np
+import numpy as np                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 import pydub, av, uuid
 from pathlib import Path
+from core.speech_to_text import speak_text
 from aiortc.contrib.media import MediaRecorder
-from streamlit_webrtc import VideoHTMLAttributes, webrtc_streamer, WebRtcMode
+from streamlit_webrtc import webrtc_streamer, WebRtcMode
+
 
 load_dotenv()
 genai.configure(api_key = os.environ["GEMINI_API_KEY"])
 def search_on_gemini(role, company, interviewer_type):
     model = genai.GenerativeModel("gemini-1.5-flash")
 
-    prompt = (
-        f"You are interviewer and you are interviewing a candidate for '{role} and diffculty level is {difficulty_level}' "
-        f"interview at {company} with a {interviewer_type} interviewer and what kind of {company_type} he is selecting . list 4 interview related questions don't add unnecessary information."
-    )
-    response = model.generate_content(prompt)
-    results = response.text.strip().split("\n")
-    return results if results else ["No results found. Please try again."]
+    prompt = json.load(open("prompts\prompts.json"))
+    response = model.generate_content(prompt.get('interviewer').format(role=role, difficulty_level=difficulty_level, company=company, interviewer_type=interviewer_type, company_type=company_type))
+
+    results = json.loads(response.text)
+    # st.write(results)
+    return results
+
 
 st.set_page_config(page_title='PlacementGuru', layout='wide')
 
@@ -102,6 +105,13 @@ with col1.container(height=350):
 
 # WebRTC stream for recording interviews
 with col2.container(height=350):
+    if st.button('Next Question'):
+        if st.session_state.get('pending_questions', None):
+            try:
+                speak_text(st.session_state['pending_questions'].pop())
+            except StopIteration:
+                speak_text("All Questions done")
+
     webstream=webrtc_streamer(
         key="Start Interview",
         mode=WebRtcMode.SENDRECV,
@@ -111,7 +121,6 @@ with col2.container(height=350):
             'echoCancellation': True,
             "noiseSuppression": True,
             "channelCount": 1}},
-        video_html_attrs=VideoHTMLAttributes(),
         on_change=convert_to_wav,
         audio_frame_callback=process_audio,
         in_recorder_factory=in_recorder_factory,
@@ -149,11 +158,16 @@ if button_click:
         with st.spinner(text='Generating Questions...', ):
             if role:
                 # Call the search function with user input
-                results = search_on_gemini(role, company, interviewer_type)
+                result = search_on_gemini(role, company, interviewer_type)
+                st.session_state['interview_question'] = result['questions'].copy()
+                st.session_state['pending_questions'] = st.session_state['interview_question'][::-1]
+
                 # Display the results
-                # st.container(border=True,height=300)  
-                for result in results:
-                    st.write(result)
+                # st.container(border=True,height=300)
+                st.subheader(result["topic-title"])
+                for i in result['questions']:
+                    st.markdown(f'-  **{i}**')
+
                     # End of result container
             else:
                 st.warning("Please enter a role to search.")

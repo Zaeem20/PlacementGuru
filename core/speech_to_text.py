@@ -1,4 +1,5 @@
 import speech_recognition as sr
+import pyttsx3
 
 def recognize_speech_to_text(file_path: str):
     recognizer = sr.Recognizer()
@@ -9,3 +10,8 @@ def recognize_speech_to_text(file_path: str):
         prediction = recognizer.recognize_whisper(audio, model='medium.en', show_dict=True)
         # predicted_text=recognizer.recognize_google(audio)
         return prediction
+    
+def speak_text(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
