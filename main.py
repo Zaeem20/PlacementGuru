@@ -30,14 +30,11 @@ st.markdown("""
 # Layout with two columns
 col1, col2 = st.columns([1, 1])
 
-# Typewriter effect function using st.empty()
 
-
-# Display text with typewriter effect
 with col1:
     st.markdown(
             """
-            <h1 style='font-size: 40px; font-weight: bold;'>Welcome to Placement Guru! 🚀</h1>
+            <h1 style='font-size: 40px; font-weight: bold;'>Welcome to PlacementGuru! 🚀</h1>
             <p style='font-size: 22px;'>Your AI-driven Interview Preparation Partner.</p>
             <br>
             <h2>How this Works</h2>

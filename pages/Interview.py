@@ -105,10 +105,12 @@ with tab1:
 
     def next_question():
         speak_text(st.session_state["current_question"])
-        if "pending_questions" in st.session_state and st.session_state["pending_questions"]:
-            st.session_state["current_question"] = st.session_state["pending_questions"].pop()
-            if st.session_state["current_question"] == None:
-                st.success("Interview Completed")
+        if "pending_questions" in st.session_state:
+            if st.session_state["pending_questions"]:
+                st.session_state["current_question"] = st.session_state["pending_questions"].pop(0)
+            else:
+                st.success("Interview Completed 🎉")
+                st.session_state["current_question"] = None
         # else:
         #     st.session_state["current_question"] = None
         #     st.success("Interview Completed! 🎈")
